@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.cuihai.library.StatusBarUtils;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
