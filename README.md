@@ -1,5 +1,5 @@
 # gm-statusbar
-状态栏透明工具类
+状态栏透明工具类（适配4.4以下，5.0以上）
 # SetUp 
 ## 1) In your root build.gradle:
 allprojects {
