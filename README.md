@@ -11,8 +11,14 @@ allprojects {
 }
 ### 2) In your library/build.gradle add:
 <pre><code>
- compile 'com.github.icuihai:gm-statusbar:1.0'
+ compile 'com.github.icuihai:gm-statusbar:2.0'
 </code></pre>
+### 你也可以直接拷贝代码到项目中使用，不满意还可自定义;
+## 使用方法：
+<pre><code>
+ StatusBarUtils.compat(this,R.color.colorAccent);
+ * 注意：第二个参数为颜色Id, *
+ </code></pre>
 ## About Me
 weibo : <https://www.weibo.com/icuihai>
 
