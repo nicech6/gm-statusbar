@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -19,25 +20,24 @@ import android.widget.LinearLayout;
  */
 
 public class StatusBarUtils {
-    /**
-     * 获取布局文件中的LinearLayout，把前面生成状态栏高度的View放进去
-     * 适用于Fragment页面中，在onViewCreated方法里面初始化
-     *
-     * @param view     布局文件
-     * @param activity 上下文环境
-     * @param layoutId 布局文件中LinearLayout(容器)的Id
-     */
-    public static void init(View view, Activity activity, int layoutId) {
-        LinearLayout decorView = (LinearLayout) view.findViewById(layoutId);
-        decorView.addView(StatusBarUtils.createStatusView(activity, Color.parseColor("#02C080")));
-    }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static void compat(Activity activity, int statusColor) {
 
-    /**
-     * 适用于Activity,在onCreate方法里面初始化
-     */
-    public static void init(Activity activity, int layoutId) {
-        LinearLayout decorView = (LinearLayout) activity.findViewById(layoutId);
-        decorView.addView(StatusBarUtils.createStatusView(activity, Color.parseColor("#02C080")));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 设置透明状态栏
+            WindowManager.LayoutParams localLayoutParams = activity.getWindow().getAttributes();
+            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+            // 生成一个状态栏大小的矩形
+            View statusView = createStatusView(activity, ContextCompat.getColor(activity, statusColor));
+            // 添加 statusView 到布局中
+            ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+            decorView.addView(statusView);
+            // 设置根布局的参数
+            ViewGroup rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+            rootView.setFitsSystemWindows(true);
+            rootView.setClipToPadding(true);
+        }
+
     }
 
     /**
@@ -47,7 +47,7 @@ public class StatusBarUtils {
      * @param color    状态栏颜色值
      * @return 状态栏矩形条
      */
-    public static View createStatusView(Activity activity, int color) {
+    private static View createStatusView(Activity activity, int color) {
         // 获得状态栏高度
         int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
         int statusBarHeight = activity.getResources().getDimensionPixelSize(resourceId);
@@ -59,27 +59,5 @@ public class StatusBarUtils {
         statusView.setLayoutParams(params);
         statusView.setBackgroundColor(color);
         return statusView;
-
-    }
-
-    /**
-     * 修改状态栏为全透明
-     *
-     * @param activity
-     */
-    @TargetApi(19)
-    public static void transparencyBar(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = activity.getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window window = activity.getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
     }
 }
