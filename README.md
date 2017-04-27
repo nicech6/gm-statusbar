@@ -1,5 +1,5 @@
 # gm-statusbar
-状态栏透明工具类（适配4.4以下，5.0以上）
+状态栏透明工具类（适配4.4以上）
 # SetUp 
 ## 1) In your root build.gradle:
 allprojects {
@@ -14,11 +14,11 @@ allprojects {
  compile 'com.github.icuihai:gm-statusbar:2.0'
 </code></pre>
 ### 你也可以直接拷贝代码到项目中使用，不满意还可自定义;
-## 使用方法：
+## 使用步骤：
 <pre><code>
  StatusBarUtils.compat(this,R.color.colorAccent);
- * 注意：第二个参数为颜色Id, *
  </code></pre>
+  * 注意：第二个参数为颜色Id, *
 ## About Me
 weibo : <https://www.weibo.com/icuihai>
 
